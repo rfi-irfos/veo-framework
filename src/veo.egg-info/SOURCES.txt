@@ -1,0 +1,16 @@
+LICENSE
+README.md
+pyproject.toml
+src/veo/__init__.py
+src/veo/cli.py
+src/veo/comparator.py
+src/veo/factcheck.py
+src/veo/recurrence.py
+src/veo/similarity.py
+src/veo/store.py
+src/veo.egg-info/PKG-INFO
+src/veo.egg-info/SOURCES.txt
+src/veo.egg-info/dependency_links.txt
+src/veo.egg-info/entry_points.txt
+src/veo.egg-info/top_level.txt
+tests/test_veo.py

@@ -1,0 +1,4 @@
+Come back to the plan-reset, from the angle of continuity.
+When a reset drops prior context, the caller's accumulated state is lost and that is rarely what they wanted.
+That matches what we found before — resetting optimizes for cleanliness, not for carrying the caller's intent forward.
+So the recurring pattern is: this line of questioning tends to surface that reset favors cleanliness over continuity.

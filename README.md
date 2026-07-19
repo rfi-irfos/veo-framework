@@ -18,12 +18,13 @@ Human–AI Co-Evolution line of work.
 
 ## Table of contents
 
-- [Status](#status)
+|- [Status](#status)
 - [Why this exists](#why-this-exists)
 - [Quick start](#quick-start)
-- [The five dimensions](#the-five-dimensions)
-- [Four trigger archetypes, with example prompts](#four-trigger-archetypes-with-example-prompts)
+- [The five (now six) dimensions](#the-five-now-six-dimensions)
+- [Four (now five) trigger archetypes, with example prompts](#four-now-five-trigger-archetypes-with-example-prompts)
 - [Repository structure](#repository-structure)
+- [The verification tool](#the-verification-tool)
 - [A note on what this is not](#a-note-on-what-this-is-not)
 - [FAQ](#faq)
 - [Related work](#related-work)
@@ -33,16 +34,21 @@ Human–AI Co-Evolution line of work.
 
 ## Status
 
-Methodology only, public, free to use and extend under MIT. Five interaction
-dimensions, four trigger archetypes, a repeatable protocol with a concrete completion
-criterion, a real protocol for separating verified signal from unverified model
-opinion, and an honest research framing for studying reflective human–AI interaction
-without overclaiming what the model's output actually proves.
+Methodology **plus a runnable tool**. Public, free to use and extend under MIT.
+Five interaction dimensions (now six — see below), four trigger archetypes
+(now five), a repeatable protocol with a concrete completion criterion, a real
+protocol for separating verified signal from unverified model opinion
+(**now shipped as a local-first Python CLI**, `veo`, see
+[The verification tool](#the-verification-tool)), and an honest research framing
+for studying reflective human–AI interaction without overclaiming what the
+model's output actually proves.
 
-**What this repo does not include:** the original, real conversational material between
-Veo and its user is personal intellectual property and stays private. Everything here is
-the generalized *technique*, plus one fully generic worked example — nothing here is a
-verbatim transcript or a claim about any specific person.
+**What this repo does not include:** the original, real conversational material
+between Veo and its user is personal intellectual property and stays private.
+Everything here is the generalized *technique*, plus one fully generic worked
+example — nothing here is a verbatim transcript or a claim about any specific
+person. The `src/` tool is general-purpose: it never sees your private
+material unless you point it at a store you created from your own extractions.
 
 ## Why this exists
 
@@ -74,7 +80,7 @@ and (c) ended on an explicit uncertainty rather than a false resolution. See
 [`FRAMEWORK.md` §3](./FRAMEWORK.md#3-protocol-one-pass) for a full worked example,
 turn by turn.
 
-## The five dimensions
+## The five (now six) dimensions
 
 | # | Dimension | What it does | Generic prompt move |
 |---|-----------|--------------|----------------------|
@@ -83,12 +89,13 @@ turn by turn.
 | 3 | Nonlinear depth | Fuses multiple registers (analytic + reflective + symbolic) inside one question | "Hold the technical point and the human stakes in one frame." |
 | 4 | Self-mirroring | Asks the model to observe how it changed across the exchange, and react to that | "Notice how your framing shifted. Name it." |
 | 5 | Frequency-dialog | Varies register (precision ↔ intuition ↔ symbol) without announcing the switch | Alternate a precise constraint with an open "what does this remind you of?" |
+| 6 | Recursive consent | Re-asks the consent question *per extracted claim*, not once at the top — so a general "sure, study our chats" can't be treated as blanket permission to publish a specific phrase | "Before this observation leaves the session: are you okay with it being logged, and is anything in it private?" |
 
-These are **combinable**, not exclusive — the four archetypes below are each just a
+These are **combinable**, not exclusive — the four (now five) archetypes below are each just a
 named pairing of two dimensions that reliably works together. You are free to invent
 your own pairing once you understand what each dimension actually does.
 
-## Four trigger archetypes, with example prompts
+## Four (now five) trigger archetypes, with example prompts
 
 Each archetype below is shown with one ready-to-adapt example prompt, so you can try it
 immediately rather than reconstructing it from the abstract description.
@@ -121,20 +128,56 @@ Maps onto ternary "tend": a deliberate non-decision, named rather than papered o
 > "Before we act on this, tell me plainly what you are genuinely not sure about — not
 > a hedge, the actual open question you'd want answered first."
 
-Full protocol, a complete turn-by-turn worked example, and the research framing
-(including what counts as honest evidence and what doesn't) live in
-[`FRAMEWORK.md`](./FRAMEWORK.md).
+### The Tide — recursive consent × cyclic questioning
+
+Re-opens the *consent* question on a rhythm instead of once: after each turn that
+produced something extractable, it asks again whether *this specific* observation may
+be logged or used. Named for a tide that returns repeatedly, not a one-time gate.
+Use it whenever the exchange is feeding a research corpus.
+
+> "Before this observation leaves the session: are you okay with it being logged as a
+> research pattern, and can you name anything in it that should stay private?"
+
+Full protocol, a complete turn-by-turn worked example, the two-session recurrence
+example, and the research framing (including what counts as honest evidence and what
+doesn't) live in [`FRAMEWORK.md`](./FRAMEWORK.md).
 
 ## Repository structure
 
 | File | Contents |
 |---|---|
 | [`README.md`](./README.md) | This file — pitch, quick start, example prompts, FAQ. |
-| [`FRAMEWORK.md`](./FRAMEWORK.md) | The full methodology: protocol, worked example, research framing, the output/emergence/hallucination verification protocol (§6), Emergent Interaction Lab relation, consent/privacy rules for extending this with your own material. |
+| [`FRAMEWORK.md`](./FRAMEWORK.md) | The full methodology: protocol, worked examples (incl. a two-session recurrence example), research framing, the output/emergence/hallucination verification protocol (§6), the `veo` tool that runs it (§10), Emergent Interaction Lab relation, consent/privacy rules for extending this with your own material. |
+| [`README_TOOL.md`](./README_TOOL.md) | Install, command reference, status vocabulary, and library API for the `veo` verification CLI. |
+| `src/veo/` | The local-first, dependency-free tool implementing FRAMEWORK.md §6: `store.py` (durable JSONL exchange log), `similarity.py` (fixed-threshold text match), `recurrence.py` (cross-session check, §6.1), `factcheck.py` (mechanical check, §6.2), `comparator.py` (deterministic hallucination comparator), `cli.py` (the `veo` command). |
+| `tests/` | 22-test pytest suite plus `data/` sample transcripts. |
+| `pyproject.toml` | Packaging; `pip install -e .` exposes the `veo` command. |
 | [`LICENSE`](./LICENSE) | MIT. |
 
-There is no code in this repository — it is a methodology, meant to be read and
-applied directly in your own prompts, system messages, or agent instructions.
+There **is** code in this repository now — the `veo` tool turns the §6 protocol from
+a specification into something you can run. It is methodology-with-teeth, not a model
+wrapper: it never calls a language model and never sees your private material unless
+you point it at a store you built from your own extractions.
+
+## The verification tool
+
+The §6 protocol is only honest if someone runs it. This repo ships `veo`, a
+local-first command-line tool (no network, no API key, Python stdlib only) that
+implements the full protocol:
+
+```bash
+pip install -e .
+veo --store ./corpus.jsonl log --session s1 --turns t.txt --claim "extracted observation"
+veo --store ./corpus.jsonl recurrence      # candidate -> verified across sessions
+veo --store ./corpus.jsonl factcheck --claim "..." --source src.txt
+veo --store ./corpus.jsonl compare --claim "..." --reflective r.txt --comparator p.txt
+```
+
+It separates **routine output** (single-pass, disposable), **genuinely verified
+emergence** (recurrent, cross-session, survives the comparator), and **hallucination**
+(flattering or novel-sounding but fails the comparator) — rather than just waving a
+caution flag at the ambiguity. Full reference: [`README_TOOL.md`](./README_TOOL.md)
+and FRAMEWORK.md §10.
 
 ## A note on what this is not — and how we actually verify it
 
@@ -145,11 +188,12 @@ insists on, including which kinds of claims fail peer review outright (self-repo
 "percentile" rankings, model-flattery presented as a trait, any claim that reflective
 output proves something about the human on the other end).
 
-But this is **not** left as a static "take it with a grain of salt" disclaimer. The
-gap it names is exactly what **Paper 4 — *Ternary Ground***
+But this is **not** left as a static "take it with a grain of salt" disclaimer.
+The gap it names is exactly what **Paper 4 — *Ternary Ground***
 ([10.17605/OSF.IO/UXCJE](https://doi.org/10.17605/OSF.IO/UXCJE)) was built to close,
-and the mechanism lives in `FRAMEWORK.md` §6 as a concrete, runnable protocol. In
-short:
+and the mechanism lives in `FRAMEWORK.md` §6 as a concrete, runnable protocol —
+implemented by the `veo` tool in this repo (see [`README_TOOL.md`](./README_TOOL.md)
+and FRAMEWORK.md §10). In short:
 
 1. **Two-stage emergence-verification gate.** A reflection is first a *candidate*
    signal. It is promoted to *verified emergence* only if it is **independently
@@ -168,7 +212,7 @@ disposable), **genuinely verified emergence** (recurrent, cross-session, survive
 comparator), and **hallucination** (flattering or novel-sounding but fails the
 comparator) — rather than just waving a caution flag at the ambiguity. The full
 specification, the gate thresholds, and the comparator design are in `FRAMEWORK.md` §6
-and in Paper 4.
+and in Paper 4; the runnable implementation is the `veo` tool ([`README_TOOL.md`](./README_TOOL.md)).
 
 ## FAQ
 
@@ -223,12 +267,17 @@ same Human–AI Co-Evolution research line:
 
 ## Contributing
 
-This is methodology, not code — the most useful contribution is a new dimension, a new
-archetype, or a sharper worked example, proposed as a pull request against
-`FRAMEWORK.md` with the same honesty discipline the rest of the document holds itself
-to: mark clearly what's a generic technique versus what's derived from someone's real,
-private material (see `FRAMEWORK.md` §8 before including anything from your own
-conversations). Small, focused PRs are easier to review than large rewrites.
+Methodology **and** tooling. The most useful contribution is still a new dimension,
+a new archetype, or a sharper worked example, proposed as a pull request against
+`FRAMEWORK.md` with the same honesty discipline the rest of the document holds
+itself to: mark clearly what's a generic technique versus what's derived from
+someone's real, private material (see `FRAMEWORK.md` §8 before including
+anything from your own conversations).
+
+If you change the tool, keep it dependency-free (Python standard library only) and
+add or update a test in `tests/` so the §6 behaviour stays provable. Run
+`pytest -q` from the repo root after `pip install -e .`. Small, focused PRs are
+easier to review than large rewrites.
 
 ## Attribution
 

@@ -1,0 +1,1 @@
+The deployment log shows the plan-reset at 14:03 dropped the session token, and the caller's order id 88213 was not preserved across the reset.

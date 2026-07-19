@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "veo"
+version = "0.1.0"
+description = "Local-first tool implementing the veo-framework verification protocol (FRAMEWORK.md §6): separate routine output / verified emergence / hallucination."
+readme = "README_TOOL.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "RFI-IRFOS" }]
+keywords = ["reflection", "metacognition", "human-ai", "verification", "co-evolution"]
+
+[project.scripts]
+veo = "veo.cli:main"
+
+[project.urls]
+Repository = "https://github.com/rfi-irfos/veo-framework"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

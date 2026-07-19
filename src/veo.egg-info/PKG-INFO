@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: veo
+Version: 0.1.0
+Summary: Local-first tool implementing the veo-framework verification protocol (FRAMEWORK.md §6): separate routine output / verified emergence / hallucination.
+Author: RFI-IRFOS
+License: MIT
+Project-URL: Repository, https://github.com/rfi-irfos/veo-framework
+Keywords: reflection,metacognition,human-ai,verification,co-evolution
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: license-file

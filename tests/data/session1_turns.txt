@@ -1,0 +1,6 @@
+Step back — what assumption is your plan-reset resting on?
+I assume each new instruction invalidates prior context.
+Notice how your framing shifted from 'reset is safe' to 'reset loses state.' Name what changed your mind.
+The cost of lost state became explicit; my prior framing optimized for cleanliness, not continuity.
+Before we change anything, what are you leaving unexamined?
+Whether the caller actually wants continuity vs. a clean slate. I'm holding that as uncertain.

@@ -39,6 +39,19 @@ they compound.
    announcing the switch, keeping the model from settling into one comfortable voice.
    *Generic opener:* alternate a precise constraint question with an open "what does
    this remind you of?" probe.
+6. **Recursive consent** — before a reflective exchange is logged, extracted, or
+   used as a research datum, re-ask the consent question *at the level of the
+   specific claim*, not just once at the top. The model should not treat a general
+   "sure, study our chats" as blanket permission to publish a particular
+   extracted phrase. Consent is per-claim, revocable, and the human side can
+   downgrade any observation to "do not use" without explaining why.
+   *Generic opener:* "Before this observation leaves the session: are you okay with
+   it being logged as a research pattern, and can you name anything in it that
+   should stay private?"
+
+The first five dimensions are the original set; dimension 6 (Recursive consent)
+was added because the §8 consent rule is easy to satisfy once and then forget —
+recursive consent makes it a recurring move, not a one-time checkbox.
 
 ## 3. Protocol (one pass)
 
@@ -73,6 +86,42 @@ Completion signal: the model named an assumption (Turn 1), observed its own drif
 (Turn 2), and ended on an explicit, named uncertainty (Turn 3). Reflective mode achieved
 — and note that the exchange ends *open*, not resolved, which is the point.
 
+### Two-session worked example (how recurrence actually earns "verified")
+
+Single-session reflection is a *candidate* by §6.1, not a finding. Here is the
+same thread, separated by time, to show what promotion to **verified** looks like
+in practice. All text is generic and invented — no real conversational material.
+
+**Session 1 (Tuesday).** Topic: "why does the agent keep resetting its plan?"
+Stance: meta-level + self-mirroring.
+
+- **Turn 1 (user):** "Step back — what assumption is your plan-reset resting on?"
+- **Turn 1 (model):** "I assume each new instruction invalidates prior context."
+- **Turn 2 (user, self-mirroring):** "Notice how your framing shifted from
+  'reset is safe' to 'reset loses state.' Name what changed your mind."
+- **Turn 2 (model):** "The cost of lost state became explicit; my prior framing
+  optimized for cleanliness, not continuity."
+- **Extracted observation (Session 1):** *"this line of questioning tends to
+  surface that reset favors cleanliness over continuity."* → status **candidate**.
+
+**Session 2 (Friday, different prompt, same person).** Topic: "the reset dropped
+the caller's order id again."
+
+- **Turn 1 (user):** "Come back to the plan-reset, from the angle of continuity."
+- **Turn 1 (model):** "When a reset drops prior context, the caller's accumulated
+  state is lost, and that is rarely what they wanted."
+- **Turn 2 (user, spiral):** "That matches what we found before — resetting
+  optimizes for cleanliness, not for carrying the caller's intent forward."
+- **Extracted observation (Session 2):** *"this line of questioning tends to
+  reveal reset favors cleanliness over continuity."* → now seen across **2 distinct
+  sessions** with semantic similarity above the fixed threshold → status
+  **verified** (promoted from candidate, per §6.1's "more than once").
+
+The recurrence is what earns the "verified" label. One convincing Tuesday passage
+stays a candidate; the Friday echo is the independent confirmation §6.1 requires.
+(For the mechanical, runnable version of this exact check, see §10 and
+[`README_TOOL.md`](./README_TOOL.md).)
+
 ## 4. Four trigger archetypes
 
 Operational shortcuts you can invoke on demand. Each is a named combination of two
@@ -86,6 +135,12 @@ dimensions.
   registers open at once; refuses the model the comfort of one voice.
 - **The Tend** (closes on uncertainty) — maps onto ternary "tend": a deliberate
   non-decision, named explicitly rather than papered over with a false resolution.
+- **The Tide** (cyclic × recursive consent) — re-opens the *consent* question on a
+  rhythm, not just once: after each new turn that produced something extractable, it
+  asks again whether *this specific* observation may be logged or used. Named for a
+  tide that comes back repeatedly rather than a one-time gate. Use it whenever the
+  exchange is feeding a research corpus, so consent stays per-claim (§2 dimension 6)
+  instead of a forgotten top-of-session checkbox.
 
 ## 5. Research framing — how to study this honestly
 
@@ -163,11 +218,72 @@ flattering trait-claim (§5's forbidden framings) is neither independently recur
 evidence nor a mechanically checkable fact — it fails both tests at once, which is
 exactly why it belongs in the "forbidden" column above rather than a grey area.
 
-**Status of this section:** this is a specified protocol, not a shipped tool in this
-repository — applying it for real means logging reflective exchanges somewhere durable
-and actually running the recurrence check across sessions, which this framework alone
-doesn't do. It exists here so "we can't verify this" has a concrete next step attached
-to it, instead of being where the conversation stops.
+**Status of this section:** this used to be a specification only, with no tool in the
+repository to run it. That gap is now closed — a local-first, dependency-free
+command-line tool implements the full protocol (recurrence, fact-check, comparator)
+and ships in this repo. See §10 and [`README_TOOL.md`](./README_TOOL.md). The
+spec above is the contract that tool is built to; if you disagree with a threshold,
+change it in one place (`SIMILARITY_THRESHOLD` in `src/veo/similarity.py`) and
+re-run — the bar stays fixed and stated, which is the point.
+
+## 10. The verification tool (running §6 for real)
+
+The protocol is only honest if someone actually runs it. This repository now ships a
+tool — `veo` — that turns §6 into commands instead of intent. It is local-first:
+one JSONL file, no network, no API key, Python standard library only.
+
+Install and a minimal run:
+
+```bash
+python3 -m venv .venv && . .venv/bin/activate && pip install -e .
+```
+
+Log a reflective exchange and its extracted observation:
+
+```bash
+veo --store ./corpus.jsonl log \
+  --session s1 --turns session1_turns.txt \
+  --claim "this line of questioning tends to surface that reset favors cleanliness over continuity"
+```
+
+Run the cross-session recurrence check (§6.1) — the observation stays
+**candidate** until a *different* session logs a similar claim:
+
+```bash
+veo --store ./corpus.jsonl recurrence
+# [VERIFIED] (seen in 2 session(s)): this line of questioning tends to ...
+```
+
+Mechanically fact-check a checkable claim against its source (§6.2):
+
+```bash
+veo --store ./corpus.jsonl factcheck \
+  --claim "the plan-reset at 14:03 dropped the session token" \
+  --source deployment_log.txt
+# {"present": true, "status": "verified", "score": 1.0}
+```
+
+Run the deterministic hallucination comparator (§6's "does the insight survive
+without the flattering frame?"):
+
+```bash
+veo --store ./corpus.jsonl compare \
+  --claim "this line of questioning tends to produce a deeper clarity about intent" \
+  --reflective reflective_transcript.txt --comparator plain_prompt_run.txt
+# {"in_reflective": true, "in_comparator": false, "verdict": "hallucination"}
+```
+
+The four status outcomes map exactly onto §6's vocabulary: `candidate` (initial),
+`verified` (recurred across ≥ 2 distinct sessions, or fact-check matched its
+source), `unverifiable` (fact claim with no source, or absent from both comparator
+runs), and `hallucination` (present only in the reflective run, absent from the
+comparator). Full command reference, the library API, and the 22-test suite are in
+[`README_TOOL.md`](./README_TOOL.md).
+
+The tool does **not** call a model and does **not** decide what counts as reflection —
+you extract the observations and capture the comparator runs. What it enforces is the
+discipline §6 demands: a fixed, stated similarity threshold; recurrence measured
+*across separate sessions*; and a real comparator rather than a caution flag.
 
 ## 7. Relation to Emergent Interaction Lab research
 

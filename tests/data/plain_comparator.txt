@@ -1,0 +1,2 @@
+Answer plainly: what happens when the agent resets its plan?
+A plan reset clears the current task list and reloads the default template. The previous steps are discarded.

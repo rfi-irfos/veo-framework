@@ -1,0 +1,4 @@
+Step back — what does this line of questioning produce?
+This line of questioning tends to produce a clearer sense of what the caller actually wants, because it forces the cost of lost state into view.
+Notice how your framing shifted. Name it.
+I moved from 'reset is safe' to 'reset loses continuity,' and that was the real insight.
