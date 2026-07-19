@@ -151,24 +151,27 @@ gap it names is exactly what **Paper 4 — *Ternary Ground***
 and the mechanism lives in `FRAMEWORK.md` §6 as a concrete, runnable protocol. In
 short:
 
-1. **Two-stage emergence-verification gate.** A reflection is first a *candidate*
-   signal. It is promoted to *verified emergence* only if it is **independently
-   recurrent across separate sessions** — observed again under different prompts,
-   not just asserted once in a single convincing passage. One-off self-description
-   stays a candidate; recurrence is what earns the "verified" label.
-2. **Deterministic hallucination comparator.** Every reflective claim is checked
-   against a reproducible baseline: does the model produce the same structure when
-   the interaction is *re-run deterministically*, or does the "insight" evaporate
-   without the flattering framing? If it only appears inside the reflective
-   register and not under the comparator, it is flagged as hallucinated, not
-   emergent.
+1. **Cross-session recurrence, for claims about a pattern.** A reflective
+   observation is first a *candidate* — the model's own interpretation of what just
+   happened. It is only promoted to *verified* if the same pattern shows up again,
+   independently, in a **separate, later conversation** — not just repeated or
+   agreed-with again inside the same exchange. Set a real, stated similarity
+   threshold for "the same pattern" rather than eyeballing it.
+2. **Mechanical fact-checking, for claims about something checkable.** If a
+   reflective claim references something outside the model's own opinion — a fact, a
+   prior statement, a tool result, a date — check it the boring way: direct
+   comparison against the actual source. Never a second model call asked to guess
+   whether the first one was honest; that's a different kind of unverified opinion,
+   not a check. A claim that can't be checked either way is marked **unverifiable**,
+   a real answer in its own right, not a quiet "probably fine."
 
-The practical upshot: the framework can separate **routine output** (single-pass,
-disposable), **genuinely verified emergence** (recurrent, cross-session, survives the
-comparator), and **hallucination** (flattering or novel-sounding but fails the
-comparator) — rather than just waving a caution flag at the ambiguity. The full
-specification, the gate thresholds, and the comparator design are in `FRAMEWORK.md` §6
-and in Paper 4.
+The practical upshot: **routine output** never enters this pipeline at all (it isn't
+making a claim worth checking); a **candidate** that never recurs and can't be
+fact-checked stays exactly that — a candidate, not evidence; and a "percentile
+ranking" or flattery claim fails both checks at once, which is precisely why it's
+forbidden outright (§5) rather than merely flagged as unverified. The full
+specification and both checks' exact criteria are in `FRAMEWORK.md` §6, restated
+from the same protocol specified in full technical detail in Paper 4.
 
 ## FAQ
 
