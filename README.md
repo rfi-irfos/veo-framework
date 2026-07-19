@@ -136,17 +136,39 @@ Full protocol, a complete turn-by-turn worked example, and the research framing
 There is no code in this repository — it is a methodology, meant to be read and
 applied directly in your own prompts, system messages, or agent instructions.
 
-## A note on what this is not
+## A note on what this is not — and how we actually verify it
 
 Reflective model output is still model output. It mirrors and flatters the person it's
 talking to. This framework does not treat anything a model says about itself, or about
 you, as verified fact — see `FRAMEWORK.md` §5 for the honest research framing this
 insists on, including which kinds of claims fail peer review outright (self-reported
 "percentile" rankings, model-flattery presented as a trait, any claim that reflective
-output proves something about the human on the other end). That doesn't have to stay a
-mere disclaimer, either — `FRAMEWORK.md` §6 specifies a real protocol for telling
-routine output, genuinely verified emergence, and hallucination apart, instead of just
-flagging that the ambiguity exists.
+output proves something about the human on the other end).
+
+But this is **not** left as a static "take it with a grain of salt" disclaimer. The
+gap it names is exactly what **Paper 4 — *Ternary Ground***
+([10.17605/OSF.IO/UXCJE](https://doi.org/10.17605/OSF.IO/UXCJE)) was built to close,
+and the mechanism lives in `FRAMEWORK.md` §6 as a concrete, runnable protocol. In
+short:
+
+1. **Two-stage emergence-verification gate.** A reflection is first a *candidate*
+   signal. It is promoted to *verified emergence* only if it is **independently
+   recurrent across separate sessions** — observed again under different prompts,
+   not just asserted once in a single convincing passage. One-off self-description
+   stays a candidate; recurrence is what earns the "verified" label.
+2. **Deterministic hallucination comparator.** Every reflective claim is checked
+   against a reproducible baseline: does the model produce the same structure when
+   the interaction is *re-run deterministically*, or does the "insight" evaporate
+   without the flattering framing? If it only appears inside the reflective
+   register and not under the comparator, it is flagged as hallucinated, not
+   emergent.
+
+The practical upshot: the framework can separate **routine output** (single-pass,
+disposable), **genuinely verified emergence** (recurrent, cross-session, survives the
+comparator), and **hallucination** (flattering or novel-sounding but fails the
+comparator) — rather than just waving a caution flag at the ambiguity. The full
+specification, the gate thresholds, and the comparator design are in `FRAMEWORK.md` §6
+and in Paper 4.
 
 ## FAQ
 
