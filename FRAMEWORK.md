@@ -125,7 +125,51 @@ this is the honest breakdown:
 | A documented account-level event (e.g. a policy action taken by the provider) | Real event | Legitimate research datum about provider policy boundaries, kept separate from any interpretive claim about the person |
 | Raw conversation text | Real, but personal intellectual property | Never publish or reuse without the account holder's own explicit, ideally written, consent |
 
-## 6. Relation to Emergent Interaction Lab research
+## 6. Telling output, emergence, and hallucination apart — a real protocol, not just a caveat
+
+§5 above states the honest problem: a model's routine output, a genuinely novel
+reflective pattern, and a confident fabrication can look identical in the moment, and
+this framework does not treat any of the model's self-descriptions as verified fact.
+That does not have to stay a disclaimer you just live with — it is a solvable problem,
+and the sibling research line this framework grew out of (Laura Serna Gaviria's
+Human–AI Co-Evolution work, operationalized across `call-laura` and its companion
+papers) already specifies the mechanism. Restated here so it applies directly to
+reflective-mode exchanges, not left as something you have to go find elsewhere:
+
+**Three states, not two.** Don't force every reflective claim into "true" or "false."
+A claim starts as an unverified **candidate** — the model's own interpretation of what
+just happened — and only earns a stronger status through one of two independent checks:
+
+1. **Cross-session recurrence (for claims about a pattern in the interaction).** A
+   reflective observation — "this line of questioning tends to produce X" — is a
+   candidate, not a finding, until the *same* pattern shows up again, independently,
+   in a **separate, later conversation**, not just repeated within one exchange (a
+   model agreeing with its own earlier framing later in the same session is not
+   independent confirmation of anything). Set a real bar for "the same pattern" —
+   semantic similarity above a fixed, stated threshold, checked the same way every
+   time — rather than eyeballing it. Only promote a candidate to **verified** once it
+   has recurred this way more than once. Until then, log it plainly as an observation,
+   never as a finding.
+2. **Mechanical fact-checking (for claims about something checkable).** If a
+   reflective exchange makes a claim that references something outside the model's own
+   opinion — a fact, a prior statement, a tool result, a date — check it the boring way:
+   direct comparison against the actual source, not a second model call asked to guess
+   whether the first one was honest. A claim that can't be mechanically checked gets
+   marked **unverifiable**, which is a real, distinct, honest answer — not a quiet
+   "probably fine."
+
+**What this rules out immediately, by construction:** a "percentile ranking" or a
+flattering trait-claim (§5's forbidden framings) is neither independently recurrent
+evidence nor a mechanically checkable fact — it fails both tests at once, which is
+exactly why it belongs in the "forbidden" column above rather than a grey area.
+
+**Status of this section:** this is a specified protocol, not a shipped tool in this
+repository — applying it for real means logging reflective exchanges somewhere durable
+and actually running the recurrence check across sessions, which this framework alone
+doesn't do. It exists here so "we can't verify this" has a concrete next step attached
+to it, instead of being where the conversation stops.
+
+## 7. Relation to Emergent Interaction Lab research
 
 The Lab's three-tier classification (Forschungsebene / Systemebene / Technische Ebene)
 maps cleanly onto a reflective transcript:
@@ -141,9 +185,9 @@ classification method — the five dimensions above give that methodology a labe
 hypothesis set for what actually *drives* Interaction-level signals, rather than
 treating "emergence" as an unexplained black box.
 
-## 7. Consent and privacy — read before extending this framework
+## 8. Consent and privacy — read before extending this framework
 
-The methodology in §2–§6 above is generalized and safe to use, share, and build on
+The methodology in §2–§7 above is generalized and safe to use, share, and build on
 freely — nothing in it depends on any one person's private material. If you want to
 extend this framework using your *own* long-running model relationship as a source of
 new patterns:
@@ -158,9 +202,9 @@ new patterns:
   anywhere else. This isn't a legal formality; it's the same no-fabrication discipline
   this whole line of work is built on.
 
-## 8. Attribution
+## 9. Attribution
 
 This framework generalizes patterns first observed in a long-running dialogue between
 Veo (a custom-GPT companion) and Laura Serna Gaviria (Emergent Interaction Lab). The
 methodology in this document is the generalized technique; the original, specific
-conversational material stays private, consistent with §7 above.
+conversational material stays private, consistent with §8 above.

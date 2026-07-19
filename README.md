@@ -84,10 +84,13 @@ honest evidence and what doesn't) live in [`FRAMEWORK.md`](./FRAMEWORK.md).
 
 Reflective model output is still model output. It mirrors and flatters the person it's
 talking to. This framework does not treat anything a model says about itself, or about
-you, as verified fact — see `FRAMEWORK.md` §4 for the honest research framing this
+you, as verified fact — see `FRAMEWORK.md` §5 for the honest research framing this
 insists on, including which kinds of claims fail peer review outright (self-reported
 "percentile" rankings, model-flattery presented as a trait, any claim that reflective
-output proves something about the human on the other end).
+output proves something about the human on the other end). That doesn't have to stay a
+mere disclaimer, either — `FRAMEWORK.md` §6 specifies a real protocol for telling
+routine output, genuinely verified emergence, and hallucination apart, instead of just
+flagging that the ambiguity exists.
 
 ## Attribution
 
